@@ -1,0 +1,182 @@
+package default
+
+<** @description : Electronic Power Supply System interface.
+                   Operational Modes: Normal and Safe
+                   General Purpose Outputs (GPOs): 4 - OUT1  OUT2  OUT3  OUT4
+                   Power Outputs: 3.3V  5V  12V
+    @author      : Steven
+**>
+interface PowerSupplySystem {
+	version { major 1 minor 0 }
+
+    // Enumerations
+    <** @description: Firmware type currently running on the device **>
+    enumeration FWType { application bootloader }
+    
+    <** @description: Bitmask for enabling/disabling battery heater depending on mode **>
+    enumeration EnableBitmask { disabled all_modes normal_mode safe_mode }
+    
+    <** @description: Status code returned by configuration commands **>
+    enumeration StatusCode { success  bad_parameters  comms_error }
+    
+    <** @description: GPO filter selection (bitmask of which outputs to act on).
+                      Multiple bits may be set at once. **>
+    enumeration GPOFilterBitMask { OUT1=0x01  OUT2=0x02  OUT3=0x04  OUT4=0x08 }
+    
+    <** @description: GPO output values (bitmask of which outputs are enabled). 
+                      OFF means all disabled. **>
+    enumeration GPOValueBitMask { OFF=0x00  En_OUT1=0x01  En_OUT2=0x02  En_OUT3=0x04  En_OUT4=0x08 }
+    
+    <** @description: Power output filter mask. **>
+    enumeration FilterBitMask { VOLTAGE_3V3=0x01  VOLTAGE_5V=0x02  VOLTAGE_12V=0x04 }
+    
+    <** @description: Power output values (bitmask of which rails are enabled). 
+                      ALL_ON=0x00 enables all outputs. **>
+    enumeration ValueBitMask { ALL_ON=0x00  En_VOLTAGE_3V3=0x01  En_VOLTAGE_5V=0x02  En_VOLTAGE_12V=0x04 }
+
+    // Structures
+    <** @description: Parameters controlling system-wide mode transition intervals. **>
+    struct TransitionSettings {
+        UInt8 ModeBroadcastInterval
+        UInt16 HealthCheckInterval
+    }
+	
+	<** @description: Threshold values for entering and leaving Safe Mode 
+                      based on voltage (mV) and temperature (°C). **>
+    struct SafeModeSettings {
+        Int64 VEnterThreshold  // in mV
+        Int64 VExitThreshold   // in mV
+        Int16 TEnterThreshold  // in °C
+        Int16 TExitThreshold   // in °C
+    }
+
+    // Methods
+    <** @description: Returns basic information about the EPS device.
+                      Includes system type  hardware version  serial number 
+                      firmware type  and firmware version **>
+    method getDeviceInfo {
+        out {
+            String SystemType
+            UInt16 SystemHWVersion
+            String SystemSerialNumber
+            FWType FirmwareType
+            UInt16 FWVersionMaj
+            UInt16 FWVersionMin
+        }
+    }
+
+	
+    <** @description: Returns telemetry from the battery pack.
+                      Includes SoC percentage  voltage (mV)  current (mA) 
+                      and temperature (°C). Current is positive during charging
+                      and negative during discharge. **>
+    method getBatteryInfo {
+        out {
+            UInt8 BattPercent
+            Int64 BattVoltage       // in mV
+            Int64 BattCurrent       // in mA  positive=charge  negative=discharge
+            Int16 BattTemperature   // in °C
+        }
+    }
+
+
+	<** @description: Configures battery heater settings for different modes.
+                      Target temperatures are provided in °C. **>
+    method setBatteryHeaterSettings {
+        in {
+            EnableBitmask Mode
+            Int32 TargetTempNormal
+            Int32 TargetTempSafe
+        }
+        out {
+            StatusCode Result
+        }
+    }
+
+
+	<** @description: Retrieves the currently configured battery heater settings. **>
+    method getBatteryHeaterSettings {
+        out {
+            EnableBitmask Mode
+            Int32 TargetTempNormal
+            Int32 TargetTempSafe
+        }
+    }
+
+
+	<** @description: Sets the transition intervals and safe mode thresholds.
+                      Combines interval timings and threshold values into one
+                      configuration command. **>
+    method setModeTransitionSettings {
+        in {
+            TransitionSettings Transition_Intervals
+            SafeModeSettings SafeMode_Thresholds
+        }
+        out {
+            StatusCode Result
+        }
+    }
+
+
+	<** @description: Reads back the current transition intervals and safe mode thresholds. **>
+    method getModeTransitionSettings {
+        out {
+            TransitionSettings Transition_Intervals
+            SafeModeSettings SafeMode_Thresholds
+        }
+    }
+
+
+	<** @description: Sets the state of one or more GPO outputs.
+                      Uses a filter mask to select which GPOs to affect 
+                      and a value mask to set their ON/OFF state. **>
+    method setGPOs {
+        in {
+            GPOFilterBitMask Filter
+            GPOValueBitMask Value
+        }
+        out {
+            StatusCode Result
+        }
+    }
+
+
+	<** @description: Returns the status of all GPO outputs as a bitmask.
+                      Bit0=OUT1  Bit1=OUT2  Bit2=OUT3  Bit3=OUT4. **>
+    method getGPOs {
+        out {
+            UInt8 GPOStatusBitMask // bit mask across OUT1..OUT4
+        }
+    }
+
+
+	<** @description: Controls enabling/disabling of regulated power outputs.
+                      Uses a filter mask to select which rails are affected 
+                      and a value mask to set their ON/OFF state. **>
+    method setPowerOutputs {
+        in {
+            FilterBitMask Filter
+            ValueBitMask Value
+        }
+        out {
+            StatusCode Result
+        }
+    }
+
+
+	<** @description: Returns the current status of all power outputs as a bitmask.
+                      Bit0=3.3V  Bit1=5V  Bit2=12V. **>
+    method getPowerOutputs {
+        out {
+            UInt16 POStatusBitMask // bit mask across 3.3V  5V  12V
+        }
+    }
+
+
+	<** @description: Performs a device reset. **>
+    method ResetDevice {
+        out {
+            Boolean Result
+        }
+    }
+}

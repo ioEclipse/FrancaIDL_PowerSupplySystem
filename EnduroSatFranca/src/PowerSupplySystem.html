@@ -1,0 +1,345 @@
+<body>
+<h1>Franca IDL package: default</h1>
+
+	<h2>Interface PowerSupplySystem</h2>
+
+	<h3>Version 1.0</h3>
+	<p><table border=1><tr><td colspan=2><em>Electronic Power Supply System interface.
+	                   Operational Modes: Normal and Safe
+	                   General Purpose Outputs (GPOs): 4 - OUT1  OUT2  OUT3  OUT4
+	                   Power Outputs: 3.3V  5V  12V</em></td></tr><tr><td><b>@author</b></td><td><em>Steven</em></td></tr></table></p>
+
+
+	<h3>Methods</h3>
+	<h4>getDeviceInfo()</h4>
+	<p><em>Returns basic information about the EPS device.
+	                      Includes system type  hardware version  serial number 
+	                      firmware type  and firmware version</em></p>
+	<table border=1>
+	<tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
+	<tr><td>out</td><td>String</td><td>SystemType</td><td></td></tr>
+	<tr><td>out</td><td>UInt16</td><td>SystemHWVersion</td><td></td></tr>
+	<tr><td>out</td><td>String</td><td>SystemSerialNumber</td><td></td></tr>
+	<tr><td>out</td><td><a href="#type_FWType">FWType</a></td><td>FirmwareType</td><td></td></tr>
+	<tr><td>out</td><td>UInt16</td><td>FWVersionMaj</td><td></td></tr>
+	<tr><td>out</td><td>UInt16</td><td>FWVersionMin</td><td></td></tr>
+	</table>
+	<h4>getBatteryInfo()</h4>
+	<p><em>Returns telemetry from the battery pack.
+	                      Includes SoC percentage  voltage (mV)  current (mA) 
+	                      and temperature (°C). Current is positive during charging
+	                      and negative during discharge.</em></p>
+	<table border=1>
+	<tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
+	<tr><td>out</td><td>UInt8</td><td>BattPercent</td><td></td></tr>
+	<tr><td>out</td><td>Int64</td><td>BattVoltage</td><td></td></tr>
+	<tr><td>out</td><td>Int64</td><td>BattCurrent</td><td></td></tr>
+	<tr><td>out</td><td>Int16</td><td>BattTemperature</td><td></td></tr>
+	</table>
+	<h4>setBatteryHeaterSettings()</h4>
+	<p><em>Configures battery heater settings for different modes.
+	                      Target temperatures are provided in °C.</em></p>
+	<table border=1>
+	<tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
+	<tr><td>in</td><td><a href="#type_EnableBitmask">EnableBitmask</a></td><td>Mode</td><td></td></tr>
+	<tr><td>in</td><td>Int32</td><td>TargetTempNormal</td><td></td></tr>
+	<tr><td>in</td><td>Int32</td><td>TargetTempSafe</td><td></td></tr>
+	<tr><td>out</td><td><a href="#type_StatusCode">StatusCode</a></td><td>Result</td><td></td></tr>
+	</table>
+	<h4>getBatteryHeaterSettings()</h4>
+	<p><em>Retrieves the currently configured battery heater settings.</em></p>
+	<table border=1>
+	<tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
+	<tr><td>out</td><td><a href="#type_EnableBitmask">EnableBitmask</a></td><td>Mode</td><td></td></tr>
+	<tr><td>out</td><td>Int32</td><td>TargetTempNormal</td><td></td></tr>
+	<tr><td>out</td><td>Int32</td><td>TargetTempSafe</td><td></td></tr>
+	</table>
+	<h4>setModeTransitionSettings()</h4>
+	<p><em>Sets the transition intervals and safe mode thresholds.
+	                      Combines interval timings and threshold values into one
+	                      configuration command.</em></p>
+	<table border=1>
+	<tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
+	<tr><td>in</td><td><a href="#type_TransitionSettings">TransitionSettings</a></td><td>Transition_Intervals</td><td></td></tr>
+	<tr><td>in</td><td><a href="#type_SafeModeSettings">SafeModeSettings</a></td><td>SafeMode_Thresholds</td><td></td></tr>
+	<tr><td>out</td><td><a href="#type_StatusCode">StatusCode</a></td><td>Result</td><td></td></tr>
+	</table>
+	<h4>getModeTransitionSettings()</h4>
+	<p><em>Reads back the current transition intervals and safe mode thresholds.</em></p>
+	<table border=1>
+	<tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
+	<tr><td>out</td><td><a href="#type_TransitionSettings">TransitionSettings</a></td><td>Transition_Intervals</td><td></td></tr>
+	<tr><td>out</td><td><a href="#type_SafeModeSettings">SafeModeSettings</a></td><td>SafeMode_Thresholds</td><td></td></tr>
+	</table>
+	<h4>setGPOs()</h4>
+	<p><em>Sets the state of one or more GPO outputs.
+	                      Uses a filter mask to select which GPOs to affect 
+	                      and a value mask to set their ON/OFF state.</em></p>
+	<table border=1>
+	<tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
+	<tr><td>in</td><td><a href="#type_GPOFilterBitMask">GPOFilterBitMask</a></td><td>Filter</td><td></td></tr>
+	<tr><td>in</td><td><a href="#type_GPOValueBitMask">GPOValueBitMask</a></td><td>Value</td><td></td></tr>
+	<tr><td>out</td><td><a href="#type_StatusCode">StatusCode</a></td><td>Result</td><td></td></tr>
+	</table>
+	<h4>getGPOs()</h4>
+	<p><em>Returns the status of all GPO outputs as a bitmask.
+	                      Bit0=OUT1  Bit1=OUT2  Bit2=OUT3  Bit3=OUT4.</em></p>
+	<table border=1>
+	<tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
+	<tr><td>out</td><td>UInt8</td><td>GPOStatusBitMask</td><td></td></tr>
+	</table>
+	<h4>setPowerOutputs()</h4>
+	<p><em>Controls enabling/disabling of regulated power outputs.
+	                      Uses a filter mask to select which rails are affected 
+	                      and a value mask to set their ON/OFF state.</em></p>
+	<table border=1>
+	<tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
+	<tr><td>in</td><td><a href="#type_FilterBitMask">FilterBitMask</a></td><td>Filter</td><td></td></tr>
+	<tr><td>in</td><td><a href="#type_ValueBitMask">ValueBitMask</a></td><td>Value</td><td></td></tr>
+	<tr><td>out</td><td><a href="#type_StatusCode">StatusCode</a></td><td>Result</td><td></td></tr>
+	</table>
+	<h4>getPowerOutputs()</h4>
+	<p><em>Returns the current status of all power outputs as a bitmask.
+	                      Bit0=3.3V  Bit1=5V  Bit2=12V.</em></p>
+	<table border=1>
+	<tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
+	<tr><td>out</td><td>UInt16</td><td>POStatusBitMask</td><td></td></tr>
+	</table>
+	<h4>ResetDevice()</h4>
+	<p><em>Performs a device reset.</em></p>
+	<table border=1>
+	<tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
+	<tr><td>out</td><td>Boolean</td><td>Result</td><td></td></tr>
+	</table>
+
+
+	<h3>Types</h3>
+	<table border=1>
+	<tr><th>Type name</th><th>Comment</th><th>Definition</th></tr>
+	<tr>
+		<td><a name="type_EnableBitmask">EnableBitmask</a></td>
+		<td><em>Bitmask for enabling/disabling battery heater depending on mode</em></td>
+		<td><table border=1>
+			<tr>
+				<td>disabled</td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>all_modes</td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>normal_mode</td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>safe_mode</td>
+				<td></td>
+				<td></td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td><a name="type_FWType">FWType</a></td>
+		<td><em>Firmware type currently running on the device</em></td>
+		<td><table border=1>
+			<tr>
+				<td>application</td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>bootloader</td>
+				<td></td>
+				<td></td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td><a name="type_FilterBitMask">FilterBitMask</a></td>
+		<td><em>Power output filter mask.</em></td>
+		<td><table border=1>
+			<tr>
+				<td>VOLTAGE_3V3</td>
+				<td>1</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>VOLTAGE_5V</td>
+				<td>2</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>VOLTAGE_12V</td>
+				<td>4</td>
+				<td></td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td><a name="type_GPOFilterBitMask">GPOFilterBitMask</a></td>
+		<td><em>GPO filter selection (bitmask of which outputs to act on).
+		                      Multiple bits may be set at once.</em></td>
+		<td><table border=1>
+			<tr>
+				<td>OUT1</td>
+				<td>1</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>OUT2</td>
+				<td>2</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>OUT3</td>
+				<td>4</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>OUT4</td>
+				<td>8</td>
+				<td></td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td><a name="type_GPOValueBitMask">GPOValueBitMask</a></td>
+		<td><em>GPO output values (bitmask of which outputs are enabled). 
+		                      OFF means all disabled.</em></td>
+		<td><table border=1>
+			<tr>
+				<td>OFF</td>
+				<td>0</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>En_OUT1</td>
+				<td>1</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>En_OUT2</td>
+				<td>2</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>En_OUT3</td>
+				<td>4</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>En_OUT4</td>
+				<td>8</td>
+				<td></td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td><a name="type_SafeModeSettings">SafeModeSettings</a></td>
+		<td><em>Threshold values for entering and leaving Safe Mode 
+		                      based on voltage (mV) and temperature (°C).</em></td>
+		<td><table border=1>
+			<tr>
+				<td>TEnterThreshold</td>
+				<td>Int16</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>TExitThreshold</td>
+				<td>Int16</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>VEnterThreshold</td>
+				<td>Int64</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>VExitThreshold</td>
+				<td>Int64</td>
+				<td></td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td><a name="type_StatusCode">StatusCode</a></td>
+		<td><em>Status code returned by configuration commands</em></td>
+		<td><table border=1>
+			<tr>
+				<td>success</td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>bad_parameters</td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>comms_error</td>
+				<td></td>
+				<td></td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td><a name="type_TransitionSettings">TransitionSettings</a></td>
+		<td><em>Parameters controlling system-wide mode transition intervals.</em></td>
+		<td><table border=1>
+			<tr>
+				<td>HealthCheckInterval</td>
+				<td>UInt16</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>ModeBroadcastInterval</td>
+				<td>UInt8</td>
+				<td></td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td><a name="type_ValueBitMask">ValueBitMask</a></td>
+		<td><em>Power output values (bitmask of which rails are enabled). 
+		                      ALL_ON=0x00 enables all outputs.</em></td>
+		<td><table border=1>
+			<tr>
+				<td>ALL_ON</td>
+				<td>0</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>En_VOLTAGE_3V3</td>
+				<td>1</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>En_VOLTAGE_5V</td>
+				<td>2</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>En_VOLTAGE_12V</td>
+				<td>4</td>
+				<td></td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+	</table>
+
+<br><hr>
+<em>Generated by Franca.HTMLGenerator</em>
+</body>
