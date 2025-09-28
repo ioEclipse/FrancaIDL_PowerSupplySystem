@@ -1,345 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PowerSupplySystem Interface Documentation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fafafa;
+            color: #333;
+        }
+        
+        h1, h2, h3, h4 {
+            color: #7b68ee;
+            margin-top: 30px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 10px;
+            border-bottom: 3px solid #7b68ee;
+            padding-bottom: 10px;
+        }
+        
+        h2 {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+        
+        h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+        
+        h4 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            background-color: #f0f0ff;
+            padding: 8px 12px;
+            border-left: 4px solid #7b68ee;
+        }
+        
+        .interface-description {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .interface-description p {
+            margin: 0;
+            white-space: pre-line;
+            line-height: 1.8;
+        }
+        
+        .author-info {
+            background-color: #f8f9ff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            border-left: 3px solid #7b68ee;
+        }
+        
+        .author-info strong {
+            color: #7b68ee;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        th {
+            background-color: #7b68ee;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        tr:hover {
+            background-color: #f0f0ff;
+        }
+        
+        .method-description {
+            background-color: #f8f9ff;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-left: 3px solid #7b68ee;
+            border-radius: 0 5px 5px 0;
+            font-style: italic;
+        }
+        
+        .type-name {
+            font-weight: bold;
+            color: #7b68ee;
+        }
+        
+        a {
+            color: #7b68ee;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            border-top: 1px solid #ddd;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .version-badge {
+            display: inline-block;
+            background-color: #7b68ee;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+    </style>
+</head>
 <body>
-<h1>Franca IDL package: default</h1>
+    <h1>Franca IDL</h1>
 
-	<h2>Interface PowerSupplySystem</h2>
+    <h2>Interface PowerSupplySystem <span class="version-badge">Version 1.0</span></h2>
 
-	<h3>Version 1.0</h3>
-	<p><table border=1><tr><td colspan=2><em>Electronic Power Supply System interface.
-	                   Operational Modes: Normal and Safe
-	                   General Purpose Outputs (GPOs): 4 - OUT1  OUT2  OUT3  OUT4
-	                   Power Outputs: 3.3V  5V  12V</em></td></tr><tr><td><b>@author</b></td><td><em>Steven</em></td></tr></table></p>
+    <div class="interface-description">
+        <p>Electronic Power Supply System interface.
 
+Operational Modes: Normal and Safe
+General Purpose Outputs (GPOs): 4 - OUT1, OUT2, OUT3, OUT4
+Power Outputs: 3.3V, 5V, 12V
 
-	<h3>Methods</h3>
-	<h4>getDeviceInfo()</h4>
-	<p><em>Returns basic information about the EPS device.
-	                      Includes system type  hardware version  serial number 
-	                      firmware type  and firmware version</em></p>
-	<table border=1>
-	<tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
-	<tr><td>out</td><td>String</td><td>SystemType</td><td></td></tr>
-	<tr><td>out</td><td>UInt16</td><td>SystemHWVersion</td><td></td></tr>
-	<tr><td>out</td><td>String</td><td>SystemSerialNumber</td><td></td></tr>
-	<tr><td>out</td><td><a href="#type_FWType">FWType</a></td><td>FirmwareType</td><td></td></tr>
-	<tr><td>out</td><td>UInt16</td><td>FWVersionMaj</td><td></td></tr>
-	<tr><td>out</td><td>UInt16</td><td>FWVersionMin</td><td></td></tr>
-	</table>
-	<h4>getBatteryInfo()</h4>
-	<p><em>Returns telemetry from the battery pack.
-	                      Includes SoC percentage  voltage (mV)  current (mA) 
-	                      and temperature (°C). Current is positive during charging
-	                      and negative during discharge.</em></p>
-	<table border=1>
-	<tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
-	<tr><td>out</td><td>UInt8</td><td>BattPercent</td><td></td></tr>
-	<tr><td>out</td><td>Int64</td><td>BattVoltage</td><td></td></tr>
-	<tr><td>out</td><td>Int64</td><td>BattCurrent</td><td></td></tr>
-	<tr><td>out</td><td>Int16</td><td>BattTemperature</td><td></td></tr>
-	</table>
-	<h4>setBatteryHeaterSettings()</h4>
-	<p><em>Configures battery heater settings for different modes.
-	                      Target temperatures are provided in °C.</em></p>
-	<table border=1>
-	<tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
-	<tr><td>in</td><td><a href="#type_EnableBitmask">EnableBitmask</a></td><td>Mode</td><td></td></tr>
-	<tr><td>in</td><td>Int32</td><td>TargetTempNormal</td><td></td></tr>
-	<tr><td>in</td><td>Int32</td><td>TargetTempSafe</td><td></td></tr>
-	<tr><td>out</td><td><a href="#type_StatusCode">StatusCode</a></td><td>Result</td><td></td></tr>
-	</table>
-	<h4>getBatteryHeaterSettings()</h4>
-	<p><em>Retrieves the currently configured battery heater settings.</em></p>
-	<table border=1>
-	<tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
-	<tr><td>out</td><td><a href="#type_EnableBitmask">EnableBitmask</a></td><td>Mode</td><td></td></tr>
-	<tr><td>out</td><td>Int32</td><td>TargetTempNormal</td><td></td></tr>
-	<tr><td>out</td><td>Int32</td><td>TargetTempSafe</td><td></td></tr>
-	</table>
-	<h4>setModeTransitionSettings()</h4>
-	<p><em>Sets the transition intervals and safe mode thresholds.
-	                      Combines interval timings and threshold values into one
-	                      configuration command.</em></p>
-	<table border=1>
-	<tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
-	<tr><td>in</td><td><a href="#type_TransitionSettings">TransitionSettings</a></td><td>Transition_Intervals</td><td></td></tr>
-	<tr><td>in</td><td><a href="#type_SafeModeSettings">SafeModeSettings</a></td><td>SafeMode_Thresholds</td><td></td></tr>
-	<tr><td>out</td><td><a href="#type_StatusCode">StatusCode</a></td><td>Result</td><td></td></tr>
-	</table>
-	<h4>getModeTransitionSettings()</h4>
-	<p><em>Reads back the current transition intervals and safe mode thresholds.</em></p>
-	<table border=1>
-	<tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
-	<tr><td>out</td><td><a href="#type_TransitionSettings">TransitionSettings</a></td><td>Transition_Intervals</td><td></td></tr>
-	<tr><td>out</td><td><a href="#type_SafeModeSettings">SafeModeSettings</a></td><td>SafeMode_Thresholds</td><td></td></tr>
-	</table>
-	<h4>setGPOs()</h4>
-	<p><em>Sets the state of one or more GPO outputs.
-	                      Uses a filter mask to select which GPOs to affect 
-	                      and a value mask to set their ON/OFF state.</em></p>
-	<table border=1>
-	<tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
-	<tr><td>in</td><td><a href="#type_GPOFilterBitMask">GPOFilterBitMask</a></td><td>Filter</td><td></td></tr>
-	<tr><td>in</td><td><a href="#type_GPOValueBitMask">GPOValueBitMask</a></td><td>Value</td><td></td></tr>
-	<tr><td>out</td><td><a href="#type_StatusCode">StatusCode</a></td><td>Result</td><td></td></tr>
-	</table>
-	<h4>getGPOs()</h4>
-	<p><em>Returns the status of all GPO outputs as a bitmask.
-	                      Bit0=OUT1  Bit1=OUT2  Bit2=OUT3  Bit3=OUT4.</em></p>
-	<table border=1>
-	<tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
-	<tr><td>out</td><td>UInt8</td><td>GPOStatusBitMask</td><td></td></tr>
-	</table>
-	<h4>setPowerOutputs()</h4>
-	<p><em>Controls enabling/disabling of regulated power outputs.
-	                      Uses a filter mask to select which rails are affected 
-	                      and a value mask to set their ON/OFF state.</em></p>
-	<table border=1>
-	<tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
-	<tr><td>in</td><td><a href="#type_FilterBitMask">FilterBitMask</a></td><td>Filter</td><td></td></tr>
-	<tr><td>in</td><td><a href="#type_ValueBitMask">ValueBitMask</a></td><td>Value</td><td></td></tr>
-	<tr><td>out</td><td><a href="#type_StatusCode">StatusCode</a></td><td>Result</td><td></td></tr>
-	</table>
-	<h4>getPowerOutputs()</h4>
-	<p><em>Returns the current status of all power outputs as a bitmask.
-	                      Bit0=3.3V  Bit1=5V  Bit2=12V.</em></p>
-	<table border=1>
-	<tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
-	<tr><td>out</td><td>UInt16</td><td>POStatusBitMask</td><td></td></tr>
-	</table>
-	<h4>ResetDevice()</h4>
-	<p><em>Performs a device reset.</em></p>
-	<table border=1>
-	<tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
-	<tr><td>out</td><td>Boolean</td><td>Result</td><td></td></tr>
-	</table>
+This file is made with the following Java, Franca, and Xtend versioning.
+Eclipse/Xtend IDE: 2018-09 (4.9.0)
+Xtext Complete SDK: 2.15.0
+Java Compliance: 1.8
+Franca IDL: 0.13.2 (Runtime and UI)
+HTML Generator used can be found in the Franca Source Code under ...examples.basic package:
+"Franca2HtmlTest.java".</p>
+        
+        <div class="author-info">
+            <strong>Author:</strong> Steven
+        </div>
+    </div>
 
+    <h3>Methods</h3>
+    
+    <h4>getDeviceInfo()</h4>
+    <div class="method-description">
+        Returns basic information about the EPS device.
+        Includes system type, hardware version, serial number, 
+        firmware type, and firmware version
+    </div>
+    <table>
+        <tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
+        <tr><td>out</td><td>String</td><td>SystemType</td><td></td></tr>
+        <tr><td>out</td><td>UInt16</td><td>SystemHWVersion</td><td>System Hardware Version</td></tr>
+        <tr><td>out</td><td>String</td><td>SystemSerialNumber</td><td></td></tr>
+        <tr><td>out</td><td><a href="#type_FWType">FWType</a></td><td>FirmwareType</td><td>FirmwareType: application, bootloader</td></tr>
+        <tr><td>out</td><td>UInt16</td><td>FWVersionMaj</td><td></td></tr>
+        <tr><td>out</td><td>UInt16</td><td>FWVersionMin</td><td></td></tr>
+    </table>
+    
+    <h4>getBatteryInfo()</h4>
+    <div class="method-description">
+        Returns telemetry from the battery pack.
+        Includes SoC percentage, voltage (mV), current (mA), 
+        and temperature (°C). Current is positive during charging
+        and negative during discharge.
+    </div>
+    <table>
+        <tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
+        <tr><td>out</td><td>UInt8</td><td>BattPercent</td><td></td></tr>
+        <tr><td>out</td><td>Int64</td><td>BattVoltage</td><td>Battery Voltage in mV</td></tr>
+        <tr><td>out</td><td>Int64</td><td>BattCurrent</td><td>Battery Current in mA, positive is for charging, negative is for discharging</td></tr>
+        <tr><td>out</td><td>Int16</td><td>BattTemperature</td><td>Battery Temperature in degrees Celcius</td></tr>
+    </table>
+    
+    <h4>setBatteryHeaterSettings()</h4>
+    <div class="method-description">
+        Configures battery heater settings for different modes.
+        Target temperatures are provided in °C.
+    </div>
+    <table>
+        <tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
+        <tr><td>in</td><td><a href="#type_EnableBitmask">EnableBitmask</a></td><td>Mode</td><td>Mode: disabled, all_modes, normal_mode, safe_mode</td></tr>
+        <tr><td>in</td><td>Int32</td><td>TargetTempNormal</td><td></td></tr>
+        <tr><td>in</td><td>Int32</td><td>TargetTempSafe</td><td></td></tr>
+        <tr><td>out</td><td><a href="#type_StatusCode">StatusCode</a></td><td>Result</td><td>Result: success, bad_parameters, comms_error</td></tr>
+    </table>
+    
+    <h4>getBatteryHeaterSettings()</h4>
+    <div class="method-description">
+        Retrieves the currently configured battery heater settings.
+    </div>
+    <table>
+        <tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
+        <tr><td>out</td><td><a href="#type_EnableBitmask">EnableBitmask</a></td><td>Mode</td><td>Mode: disabled, all_modes, normal_mode, safe_mode</td></tr>
+        <tr><td>out</td><td>Int32</td><td>TargetTempNormal</td><td></td></tr>
+        <tr><td>out</td><td>Int32</td><td>TargetTempSafe</td><td></td></tr>
+    </table>
+    
+    <h4>setModeTransitionSettings()</h4>
+    <div class="method-description">
+        Sets the transition intervals and safe mode thresholds.
+        Combines interval timings and threshold values into one
+        configuration command.
+    </div>
+    <table>
+        <tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
+        <tr><td>in</td><td><a href="#type_TransitionSettings">TransitionSettings</a></td><td>Transition_Intervals</td><td>struct Transition_Intervals: UInt8 ModeBroadcastInterval, UInt16 HealthCheckInterval</td></tr>
+        <tr><td>in</td><td><a href="#type_SafeModeSettings">SafeModeSettings</a></td><td>SafeMode_Thresholds</td><td>struct SafeMode_Thresholds: Int64 VEnterThreshold in mV, Int64 VExitThreshold in mV, Int16 TEnterThreshold in °C, Int16 TExitThreshold in °C</td></tr>
+        <tr><td>out</td><td><a href="#type_StatusCode">StatusCode</a></td><td>Result</td><td>Result: success, bad_parameters, comms_error</td></tr>
+    </table>
+    
+    <h4>getModeTransitionSettings()</h4>
+    <div class="method-description">
+        Reads back the current transition intervals and safe mode thresholds.
+    </div>
+    <table>
+        <tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
+        <tr><td>out</td><td><a href="#type_TransitionSettings">TransitionSettings</a></td><td>Transition_Intervals</td><td>struct Transition_Intervals: UInt8 ModeBroadcastInterval, UInt16 HealthCheckInterval</td></tr>
+        <tr><td>out</td><td><a href="#type_SafeModeSettings">SafeModeSettings</a></td><td>SafeMode_Thresholds</td><td>struct SafeMode_Thresholds: Int64 VEnterThreshold in mV, Int64 VExitThreshold in mV, Int16 TEnterThreshold in °C, Int16 TExitThreshold in °C</td></tr>
+    </table>
+    
+    <h4>setGPOs()</h4>
+    <div class="method-description">
+        Sets the state of one or more GPO outputs.
+        Uses a filter mask to select which GPOs to affect 
+        and a value mask to set their ON/OFF state.
+    </div>
+    <table>
+        <tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
+        <tr><td>in</td><td><a href="#type_GPOFilterBitMask">GPOFilterBitMask</a></td><td>Filter</td><td>Filter: OUT1=0x01, OUT2=0x02, OUT3=0x04, OUT4=0x08</td></tr>
+        <tr><td>in</td><td><a href="#type_GPOValueBitMask">GPOValueBitMask</a></td><td>Value</td><td>Value: OFF=0x00, En_OUT1=0x01, En_OUT2=0x02, En_OUT3=0x04, En_OUT4=0x08</td></tr>
+        <tr><td>out</td><td><a href="#type_StatusCode">StatusCode</a></td><td>Result</td><td>Result: success, bad_parameters, comms_error</td></tr>
+    </table>
+    
+    <h4>getGPOs()</h4>
+    <div class="method-description">
+        Returns the status of all GPO outputs as a bitmask.
+    </div>
+    <table>
+        <tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
+        <tr><td>out</td><td>UInt8</td><td>GPOStatusBitMask</td><td>Bitmask that shows the current status of all GPOs following the corresponding bit scheme:<br>
+Bit0=En_OUT1, Bit1=STAT_OUT1<br>
+Bit2=En_OUT2, Bit3=STAT_OUT2<br>
+Bit4=En_OUT3, Bit5=STAT_OUT3<br>
+Bit6=En_OUT4, Bit7=STAT_OUT4</td></tr>
+    </table>
+    
+    <h4>setPowerOutputs()</h4>
+    <div class="method-description">
+        Controls enabling/disabling of regulated power outputs.
+        Uses a filter mask to select which rails are affected 
+        and a value mask to set their ON/OFF state.
+    </div>
+    <table>
+        <tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
+        <tr><td>in</td><td><a href="#type_FilterBitMask">FilterBitMask</a></td><td>Filter</td><td>Filter: VOLTAGE_3V3=0x01, VOLTAGE_5V=0x02, VOLTAGE_12V=0x04</td></tr>
+        <tr><td>in</td><td><a href="#type_ValueBitMask">ValueBitMask</a></td><td>Value</td><td>Value: ALL_ON=0x00, En_VOLTAGE_3V3=0x01, En_VOLTAGE_5V=0x02, En_VOLTAGE_12V=0x04</td></tr>
+        <tr><td>out</td><td><a href="#type_StatusCode">StatusCode</a></td><td>Result</td><td>Result: success, bad_parameters, comms_error</td></tr>
+    </table>
+    
+    <h4>getPowerOutputs()</h4>
+    <div class="method-description">
+        Returns the current status of all power outputs as a bitmask.
+        The corresponding bits of the mask (16 bits) should follow the shown scheme.
+    </div>
+    <table>
+        <tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
+        <tr><td>out</td><td>UInt16</td><td>POStatusBitMask</td><td>Bitmask that shows the current status of all the power outputs.<br>
+Value of each corresponding bit # is shown:<br><br>
+<strong>Power Control:</strong><br>
+Bits 0-2: En_VOLTAGE_3V3, En_VOLTAGE_5V, En_VOLTAGE_12V<br><br>
+<strong>Status Indicators:</strong><br>
+Bits 3-5: STAT_3V3_GOOD, STAT_5V_GOOD, STAT_12V_GOOD<br>
+Bits 6-8: STAT_OVERCURRENT, STAT_OVERVOLT, STAT_UNDERVOLT<br>
+Bits 9-10: STAT_TEMP_WARN, STAT_TEMP_SHUTDOWN<br>
+Bits 11-12: STAT_MODE_SAFE, STAT_MODE_NORMAL<br>
+Bits 13-15: RESERVED</td></tr>
+    </table>
+    
+    <h4>ResetDevice()</h4>
+    <div class="method-description">
+        Performs a device reset.
+    </div>
+    <table>
+        <tr><th>Dir</th><th>Type</th><th>Name</th><th>Comment</th></tr>
+        <tr><td>out</td><td>Boolean</td><td>Result</td><td></td></tr>
+    </table>
 
-	<h3>Types</h3>
-	<table border=1>
-	<tr><th>Type name</th><th>Comment</th><th>Definition</th></tr>
-	<tr>
-		<td><a name="type_EnableBitmask">EnableBitmask</a></td>
-		<td><em>Bitmask for enabling/disabling battery heater depending on mode</em></td>
-		<td><table border=1>
-			<tr>
-				<td>disabled</td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>all_modes</td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>normal_mode</td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>safe_mode</td>
-				<td></td>
-				<td></td>
-			</tr>
-		</table>
-		</td>
-	</tr>
-	<tr>
-		<td><a name="type_FWType">FWType</a></td>
-		<td><em>Firmware type currently running on the device</em></td>
-		<td><table border=1>
-			<tr>
-				<td>application</td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>bootloader</td>
-				<td></td>
-				<td></td>
-			</tr>
-		</table>
-		</td>
-	</tr>
-	<tr>
-		<td><a name="type_FilterBitMask">FilterBitMask</a></td>
-		<td><em>Power output filter mask.</em></td>
-		<td><table border=1>
-			<tr>
-				<td>VOLTAGE_3V3</td>
-				<td>1</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>VOLTAGE_5V</td>
-				<td>2</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>VOLTAGE_12V</td>
-				<td>4</td>
-				<td></td>
-			</tr>
-		</table>
-		</td>
-	</tr>
-	<tr>
-		<td><a name="type_GPOFilterBitMask">GPOFilterBitMask</a></td>
-		<td><em>GPO filter selection (bitmask of which outputs to act on).
-		                      Multiple bits may be set at once.</em></td>
-		<td><table border=1>
-			<tr>
-				<td>OUT1</td>
-				<td>1</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>OUT2</td>
-				<td>2</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>OUT3</td>
-				<td>4</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>OUT4</td>
-				<td>8</td>
-				<td></td>
-			</tr>
-		</table>
-		</td>
-	</tr>
-	<tr>
-		<td><a name="type_GPOValueBitMask">GPOValueBitMask</a></td>
-		<td><em>GPO output values (bitmask of which outputs are enabled). 
-		                      OFF means all disabled.</em></td>
-		<td><table border=1>
-			<tr>
-				<td>OFF</td>
-				<td>0</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>En_OUT1</td>
-				<td>1</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>En_OUT2</td>
-				<td>2</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>En_OUT3</td>
-				<td>4</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>En_OUT4</td>
-				<td>8</td>
-				<td></td>
-			</tr>
-		</table>
-		</td>
-	</tr>
-	<tr>
-		<td><a name="type_SafeModeSettings">SafeModeSettings</a></td>
-		<td><em>Threshold values for entering and leaving Safe Mode 
-		                      based on voltage (mV) and temperature (°C).</em></td>
-		<td><table border=1>
-			<tr>
-				<td>TEnterThreshold</td>
-				<td>Int16</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>TExitThreshold</td>
-				<td>Int16</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>VEnterThreshold</td>
-				<td>Int64</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>VExitThreshold</td>
-				<td>Int64</td>
-				<td></td>
-			</tr>
-		</table>
-		</td>
-	</tr>
-	<tr>
-		<td><a name="type_StatusCode">StatusCode</a></td>
-		<td><em>Status code returned by configuration commands</em></td>
-		<td><table border=1>
-			<tr>
-				<td>success</td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>bad_parameters</td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>comms_error</td>
-				<td></td>
-				<td></td>
-			</tr>
-		</table>
-		</td>
-	</tr>
-	<tr>
-		<td><a name="type_TransitionSettings">TransitionSettings</a></td>
-		<td><em>Parameters controlling system-wide mode transition intervals.</em></td>
-		<td><table border=1>
-			<tr>
-				<td>HealthCheckInterval</td>
-				<td>UInt16</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>ModeBroadcastInterval</td>
-				<td>UInt8</td>
-				<td></td>
-			</tr>
-		</table>
-		</td>
-	</tr>
-	<tr>
-		<td><a name="type_ValueBitMask">ValueBitMask</a></td>
-		<td><em>Power output values (bitmask of which rails are enabled). 
-		                      ALL_ON=0x00 enables all outputs.</em></td>
-		<td><table border=1>
-			<tr>
-				<td>ALL_ON</td>
-				<td>0</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>En_VOLTAGE_3V3</td>
-				<td>1</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>En_VOLTAGE_5V</td>
-				<td>2</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>En_VOLTAGE_12V</td>
-				<td>4</td>
-				<td></td>
-			</tr>
-		</table>
-		</td>
-	</tr>
-	</table>
+    <h3>Types</h3>
+    <table>
+        <tr><th>Type name</th><th>Comment</th><th>Definition</th></tr>
+        <tr>
+            <td><a name="type_EnableBitmask" class="type-name">EnableBitmask</a></td>
+            <td>Bitmask for enabling/disabling battery heater depending on mode</td>
+            <td>
+                <table style="margin: 5px 0; box-shadow: none;">
+                    <tr><td style="border: 1px solid #ddd;">disabled</td><td style="border: 1px solid #ddd;"></td><td style="border: 1px solid #ddd;"></td></tr>
+                    <tr><td style="border: 1px solid #ddd;">all_modes</td><td style="border: 1px solid #ddd;"></td><td style="border: 1px solid #ddd;"></td></tr>
+                    <tr><td style="border: 1px solid #ddd;">normal_mode</td><td style="border: 1px solid #ddd;"></td><td style="border: 1px solid #ddd;"></td></tr>
+                    <tr><td style="border: 1px solid #ddd;">safe_mode</td><td style="border: 1px solid #ddd;"></td><td style="border: 1px solid #ddd;"></td></tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td><a name="type_FWType" class="type-name">FWType</a></td>
+            <td>Firmware type currently running on the device</td>
+            <td>
+                <table style="margin: 5px 0; box-shadow: none;">
+                    <tr><td style="border: 1px solid #ddd;">application</td><td style="border: 1px solid #ddd;"></td><td style="border: 1px solid #ddd;"></td></tr>
+                    <tr><td style="border: 1px solid #ddd;">bootloader</td><td style="border: 1px solid #ddd;"></td><td style="border: 1px solid #ddd;"></td></tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td><a name="type_FilterBitMask" class="type-name">FilterBitMask</a></td>
+            <td>Power output filter mask.</td>
+            <td>
+                <table style="margin: 5px 0; box-shadow: none;">
+                    <tr><td style="border: 1px solid #ddd;">VOLTAGE_3V3</td><td style="border: 1px solid #ddd;">1</td><td style="border: 1px solid #ddd;"></td></tr>
+                    <tr><td style="border: 1px solid #ddd;">VOLTAGE_5V</td><td style="border: 1px solid #ddd;">2</td><td style="border: 1px solid #ddd;"></td></tr>
+                    <tr><td style="border: 1px solid #ddd;">VOLTAGE_12V</td><td style="border: 1px solid #ddd;">4</td><td style="border: 1px solid #ddd;"></td></tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td><a name="type_GPOFilterBitMask" class="type-name">GPOFilterBitMask</a></td>
+            <td>GPO filter selection (bitmask of which outputs to act on). Multiple bits may be set at once.</td>
+            <td>
+                <table style="margin: 5px 0; box-shadow: none;">
+                    <tr><td style="border: 1px solid #ddd;">OUT1</td><td style="border: 1px solid #ddd;">1</td><td style="border: 1px solid #ddd;"></td></tr>
+                    <tr><td style="border: 1px solid #ddd;">OUT2</td><td style="border: 1px solid #ddd;">2</td><td style="border: 1px solid #ddd;"></td></tr>
+                    <tr><td style="border: 1px solid #ddd;">OUT3</td><td style="border: 1px solid #ddd;">4</td><td style="border: 1px solid #ddd;"></td></tr>
+                    <tr><td style="border: 1px solid #ddd;">OUT4</td><td style="border: 1px solid #ddd;">8</td><td style="border: 1px solid #ddd;"></td></tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td><a name="type_GPOValueBitMask" class="type-name">GPOValueBitMask</a></td>
+            <td>GPO output values (bitmask of which outputs are enabled). OFF means all disabled. En relates to the enable function. When true the output is enabled through the GPO.</td>
+            <td>
+                <table style="margin: 5px 0; box-shadow: none;">
+                    <tr><td style="border: 1px solid #ddd;">OFF</td><td style="border: 1px solid #ddd;">0</td><td style="border: 1px solid #ddd;"></td></tr>
+                    <tr><td style="border: 1px solid #ddd;">En_OUT1</td><td style="border: 1px solid #ddd;">1</td><td style="border: 1px solid #ddd;"></td></tr>
+                    <tr><td style="border: 1px solid #ddd;">En_OUT2</td><td style="border: 1px solid #ddd;">2</td><td style="border: 1px solid #ddd;"></td></tr>
+                    <tr><td style="border: 1px solid #ddd;">En_OUT3</td><td style="border: 1px solid #ddd;">4</td><td style="border: 1px solid #ddd;"></td></tr>
+                    <tr><td style="border: 1px solid #ddd;">En_OUT4</td><td style="border: 1px solid #ddd;">8</td><td style="border: 1px solid #ddd;"></td></tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td><a name="type_SafeModeSettings" class="type-name">SafeModeSettings</a></td>
+            <td>Threshold values for entering and leaving Safe Mode based on voltage (mV) and temperature (°C).</td>
+            <td>
+                <table style="margin: 5px 0; box-shadow: none;">
+                    <tr><td style="border: 1px solid #ddd;">TEnterThreshold</td><td style="border: 1px solid #ddd;">Int16</td><td style="border: 1px solid #ddd;">Temperature Enter Threshold in Degrees Celcius</td></tr>
+                    <tr><td style="border: 1px solid #ddd;">TExitThreshold</td><td style="border: 1px solid #ddd;">Int16</td><td style="border: 1px solid #ddd;">Temperature Exit Threshold in Degrees Celcius</td></tr>
+                    <tr><td style="border: 1px solid #ddd;">VEnterThreshold</td><td style="border: 1px solid #ddd;">Int64</td><td style="border: 1px solid #ddd;">Voltage Enter Threshold in mV</td></tr>
+                    <tr><td style="border: 1px solid #ddd;">VExitThreshold</td><td style="border: 1px solid #ddd;">Int64</td><td style="border: 1px solid #ddd;">Voltage Exit Threshold in mV</td></tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td><a name="type_StatusCode" class="type-name">StatusCode</a></td>
+            <td>Status code returned by configuration commands</td>
+            <td>
+                <table style="margin: 5px 0; box-shadow: none;">
+                    <tr><td style="border: 1px solid #ddd;">success</td><td style="border: 1px solid #ddd;"></td><td style="border: 1px solid #ddd;"></td></tr>
+                    <tr><td style="border: 1px solid #ddd;">bad_parameters</td><td style="border: 1px solid #ddd;"></td><td style="border: 1px solid #ddd;"></td></tr>
+                    <tr><td style="border: 1px solid #ddd;">comms_error</td><td style="border: 1px solid #ddd;"></td><td style="border: 1px solid #ddd;"></td></tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td><a name="type_TransitionSettings" class="type-name">TransitionSettings</a></td>
+            <td>Parameters controlling system-wide mode transition intervals.</td>
+            <td>
+                <table style="margin: 5px 0; box-shadow: none;">
+                    <tr><td style="border: 1px solid #ddd;">HealthCheckInterval</td><td style="border: 1px solid #ddd;">UInt16</td><td style="border: 1px solid #ddd;"></td></tr>
+                    <tr><td style="border: 1px solid #ddd;">ModeBroadcastInterval</td><td style="border: 1px solid #ddd;">UInt8</td><td style="border: 1px solid #ddd;"></td></tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td><a name="type_ValueBitMask" class="type-name">ValueBitMask</a></td>
+            <td>Power output values (bitmask of which rails are enabled). ALL_ON=0x00 enables all outputs. En relates to the enable function. When true the corresponding voltage is enabled as an output.</td>
+            <td>
+                <table style="margin: 5px 0; box-shadow: none;">
+                    <tr><td style="border: 1px solid #ddd;">ALL_ON</td><td style="border: 1px solid #ddd;">0</td><td style="border: 1px solid #ddd;"></td></tr>
+                    <tr><td style="border: 1px solid #ddd;">En_VOLTAGE_3V3</td><td style="border: 1px solid #ddd;">1</td><td style="border: 1px solid #ddd;"></td></tr>
+                    <tr><td style="border: 1px solid #ddd;">En_VOLTAGE_5V</td><td style="border: 1px solid #ddd;">2</td><td style="border: 1px solid #ddd;"></td></tr>
+                    <tr><td style="border: 1px solid #ddd;">En_VOLTAGE_12V</td><td style="border: 1px solid #ddd;">4</td><td style="border: 1px solid #ddd;"></td></tr>
+                </table>
+            </td>
+        </tr>
+    </table>
 
-<br><hr>
-<em>Generated by Franca.HTMLGenerator</em>
+    <div class="footer">
+        Generated by Franca.HTMLGenerator & augmented with Claude Sonnet 4
+    </div>
 </body>
+</html>

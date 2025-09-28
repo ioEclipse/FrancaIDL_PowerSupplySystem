@@ -1,20 +1,31 @@
 package default
 
 <** @description : Electronic Power Supply System interface.
+
                    Operational Modes: Normal and Safe
-                   General Purpose Outputs (GPOs): 4 - OUT1  OUT2  OUT3  OUT4
-                   Power Outputs: 3.3V  5V  12V
+                   General Purpose Outputs (GPOs): 4 - OUT1, OUT2, OUT3, OUT4
+                   Power Outputs: 3.3V, 5V, 12V
+                   
+                   This file is made with the following Java, Franca, and Xtend versioning.
+                   Eclipse/Xtend IDE: 2018-09 (4.9.0)
+                   Xtext Complete SDK: 2.15.0
+                   Java Compliance: 1.8
+                   Franca IDL: 0.13.2 (Runtime and UI)
+                   HTML Generator used can be found in the Franca Source Code under ...examples.basic package:
+                   "Franca2HtmlTest.java".
+                   
     @author      : Steven
 **>
 interface PowerSupplySystem {
 	version { major 1 minor 0 }
 
-    // Enumerations
+
+    // <=== Enumerations ===>
     <** @description: Firmware type currently running on the device **>
-    enumeration FWType { application bootloader }
+    enumeration FWType { application  bootloader }
     
     <** @description: Bitmask for enabling/disabling battery heater depending on mode **>
-    enumeration EnableBitmask { disabled all_modes normal_mode safe_mode }
+    enumeration EnableBitmask { disabled  all_modes  normal_mode  safe_mode }
     
     <** @description: Status code returned by configuration commands **>
     enumeration StatusCode { success  bad_parameters  comms_error }
@@ -24,71 +35,92 @@ interface PowerSupplySystem {
     enumeration GPOFilterBitMask { OUT1=0x01  OUT2=0x02  OUT3=0x04  OUT4=0x08 }
     
     <** @description: GPO output values (bitmask of which outputs are enabled). 
-                      OFF means all disabled. **>
+                      OFF means all disabled. En relates to the enable function. 
+                      When true the output is enabled through the GPO.**>
     enumeration GPOValueBitMask { OFF=0x00  En_OUT1=0x01  En_OUT2=0x02  En_OUT3=0x04  En_OUT4=0x08 }
     
     <** @description: Power output filter mask. **>
     enumeration FilterBitMask { VOLTAGE_3V3=0x01  VOLTAGE_5V=0x02  VOLTAGE_12V=0x04 }
     
     <** @description: Power output values (bitmask of which rails are enabled). 
-                      ALL_ON=0x00 enables all outputs. **>
+                      ALL_ON=0x00 enables all outputs. En relates to the enable function.
+                      When true the corresponding voltage is enabled as an output.**>
     enumeration ValueBitMask { ALL_ON=0x00  En_VOLTAGE_3V3=0x01  En_VOLTAGE_5V=0x02  En_VOLTAGE_12V=0x04 }
 
-    // Structures
+
+    // <=== Structures ===>
     <** @description: Parameters controlling system-wide mode transition intervals. **>
     struct TransitionSettings {
         UInt8 ModeBroadcastInterval
         UInt16 HealthCheckInterval
     }
 	
+	
 	<** @description: Threshold values for entering and leaving Safe Mode 
                       based on voltage (mV) and temperature (°C). **>
     struct SafeModeSettings {
+    	<** @description: Voltage Enter Threshold in mV **>
         Int64 VEnterThreshold  // in mV
+        <** @description: Voltage Exit Threshold in mV **>
         Int64 VExitThreshold   // in mV
+        <** @description: Temperature Enter Threshold in Degrees Celcius **>
         Int16 TEnterThreshold  // in °C
+        <** @description: Temperature Exit Threshold in Degrees Celcius **>
         Int16 TExitThreshold   // in °C
     }
 
-    // Methods
+
+    // <===== METHODS =====>
     <** @description: Returns basic information about the EPS device.
                       Includes system type  hardware version  serial number 
                       firmware type  and firmware version **>
     method getDeviceInfo {
+    	//OUTPUTS
         out {
             String SystemType
+            <** @description: System Hardware Version**>
             UInt16 SystemHWVersion
             String SystemSerialNumber
+            <** @description: FirmwareType: application, bootloader**>
             FWType FirmwareType
             UInt16 FWVersionMaj
             UInt16 FWVersionMin
         }
     }
 
-	
+
+	// === BATTERY ===
     <** @description: Returns telemetry from the battery pack.
-                      Includes SoC percentage  voltage (mV)  current (mA) 
+                      Includes SoC percentage,  voltage (mV),  current (mA), 
                       and temperature (°C). Current is positive during charging
                       and negative during discharge. **>
     method getBatteryInfo {
+    	//OUTPUTS
         out {
             UInt8 BattPercent
+            <** @description: Battery Voltage in mV**>
             Int64 BattVoltage       // in mV
+            <** @description: Battery Current in mA, positive is for charging, negative is for discharging**>
             Int64 BattCurrent       // in mA  positive=charge  negative=discharge
+            <** @description: Battery Temperature in degrees Celcius**>
             Int16 BattTemperature   // in °C
         }
     }
 
-
+	
 	<** @description: Configures battery heater settings for different modes.
                       Target temperatures are provided in °C. **>
     method setBatteryHeaterSettings {
+    	//INPUTS
         in {
+        	<** @description: Mode: disabled, all_modes, normal_mode, safe_mode **>
             EnableBitmask Mode
             Int32 TargetTempNormal
             Int32 TargetTempSafe
         }
+        //OUTPUTS
         out {
+        	<** @description: Result: success, bad_parameters, comms_error **>
             StatusCode Result
         }
     }
@@ -96,7 +128,9 @@ interface PowerSupplySystem {
 
 	<** @description: Retrieves the currently configured battery heater settings. **>
     method getBatteryHeaterSettings {
+    	//OUTPUTS
         out {
+        	<** @description: Mode: disabled, all_modes, normal_mode, safe_mode **>
             EnableBitmask Mode
             Int32 TargetTempNormal
             Int32 TargetTempSafe
@@ -104,15 +138,25 @@ interface PowerSupplySystem {
     }
 
 
+	// === TRANSITION ===
 	<** @description: Sets the transition intervals and safe mode thresholds.
                       Combines interval timings and threshold values into one
                       configuration command. **>
     method setModeTransitionSettings {
+    	//INPUTS
         in {
+        	<** @description: struct Transition_Intervals: UInt8 ModeBroadcastInterval,
+        	 											   UInt16 HealthCheckInterval **>
             TransitionSettings Transition_Intervals
+            <** @description: struct SafeMode_Thresholds: Int64 VEnterThreshold in mV,
+             											  Int64 VExitThreshold in mV,
+             											  Int16 TEnterThreshold in °C, 
+             											  Int16 TExitThreshold in °C **>
             SafeModeSettings SafeMode_Thresholds
         }
+        //OUTPUTS
         out {
+        	<** @description: Result: success, bad_parameters, comms_error **>
             StatusCode Result
         }
     }
@@ -120,61 +164,94 @@ interface PowerSupplySystem {
 
 	<** @description: Reads back the current transition intervals and safe mode thresholds. **>
     method getModeTransitionSettings {
+    	//OUTPUTS
         out {
+        	<** @description: struct Transition_Intervals: UInt8 ModeBroadcastInterval, UInt16 HealthCheckInterval **>
             TransitionSettings Transition_Intervals
+            <** @description: struct SafeMode_Thresholds: Int64 VEnterThreshold in mV, 
+            											  Int64 VExitThreshold in mV, 
+            											  Int16 TEnterThreshold in °C, 
+            											  Int16 TExitThreshold in °C **>
             SafeModeSettings SafeMode_Thresholds
         }
     }
 
 
+	// === GPOs ===
 	<** @description: Sets the state of one or more GPO outputs.
                       Uses a filter mask to select which GPOs to affect 
                       and a value mask to set their ON/OFF state. **>
     method setGPOs {
+    	//INPUTS
         in {
+        	<** @description: Filter: OUT1=0x01, OUT2=0x02, OUT3=0x04, OUT4=0x08 **>
             GPOFilterBitMask Filter
+            <** @description: Value: OFF=0x00, En_OUT1=0x01, En_OUT2=0x02, En_OUT3=0x04, En_OUT4=0x08 **>
             GPOValueBitMask Value
         }
+        //OUTPUTS
         out {
+        	<** @description: Result: success, bad_parameters, comms_error **>
             StatusCode Result
         }
     }
 
 
-	<** @description: Returns the status of all GPO outputs as a bitmask.
-                      Bit0=OUT1  Bit1=OUT2  Bit2=OUT3  Bit3=OUT4. **>
+	<** @description: Returns the status of all GPO outputs as a bitmask. **>
     method getGPOs {
+    	//OUTPUTS
         out {
-            UInt8 GPOStatusBitMask // bit mask across OUT1..OUT4
+        	<** @description: Bitmask that shows the current status of all GPOs following the corresponding bit scheme:
+        	 				  Bit0=En_OUT1, Bit1=STAT_OUT1, Bit2=En_OUT2, Bit3=_STAT_OUT2,
+        	 				  Bit4=En_OUT3, Bit5=STAT_OUT3, Bit6=En_OUT4, Bit7=STAT_OUT4 **>
+            UInt8 GPOStatusBitMask // bit mask across OUT1..OUT4 showing whether its enabled and its status
         }
-    }
+	}
 
 
+	// === POWER OUTPUTS ===
 	<** @description: Controls enabling/disabling of regulated power outputs.
                       Uses a filter mask to select which rails are affected 
                       and a value mask to set their ON/OFF state. **>
     method setPowerOutputs {
+    	//INPUTS
         in {
+        	<** @description: Filter: VOLTAGE_3V3=0x01, VOLTAGE_5V=0x02,
+        	 						  VOLTAGE_12V=0x04 **>
             FilterBitMask Filter
+            <** @description: Value: ALL_ON=0x00, En_VOLTAGE_3V3=0x01,
+            						 En_VOLTAGE_5V=0x02, En_VOLTAGE_12V=0x04 **>
             ValueBitMask Value
         }
+        //OUTPUTS
         out {
+        	<** @description: Result: success, bad_parameters, comms_error **>
             StatusCode Result
         }
     }
 
 
 	<** @description: Returns the current status of all power outputs as a bitmask.
-                      Bit0=3.3V  Bit1=5V  Bit2=12V. **>
+                      The corresponding bits of the mask (16 bits) should follow the shown scheme. **>                      
     method getPowerOutputs {
+    	//OUTPUTS
         out {
-            UInt16 POStatusBitMask // bit mask across 3.3V  5V  12V
+        	<** @description: Bitmask that shows the current status of all the power outputs. 
+        					  Value of each corresponding bit # is shown: 
+        					  Bits: 0=En_VOLTAGE_3V3, 1=En_VOLTAGE_5V, 2=En_VOLTAGE_12V,
+        					        3=STAT_3V3_GOOD, 4=STAT_5V_GOOD, 5=STAT_12V_GOOD, 
+        					        6=STAT_OVERCURRENT, 7=STAT_OVERVOLT, 8=STAT_UNDERVOLT,
+        					        9=STAT_TEMP_WARN, 10=STAT_TEMP_SHUTDOWN, 11=STAT_MODE_SAFE,
+        					        12=STAT_MODE_NORMAL, 13-15=RESERVED **>
+            UInt16 POStatusBitMask // bit mask across 3.3V, 5V, 12V
         }
     }
 
 
+	// === RESET ===
 	<** @description: Performs a device reset. **>
     method ResetDevice {
+    	//OUTPUTS
         out {
             Boolean Result
         }
