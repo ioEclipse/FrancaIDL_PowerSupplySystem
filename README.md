@@ -1,4 +1,4 @@
-### Conceptual Franca IDL Interface Definition of a Power Supply System for a Small Satellite
+### Conceptual Franca IDL Interface Definition of a <br/>Power Supply System for a Small Satellite
 ---
 **Files contained**
 
